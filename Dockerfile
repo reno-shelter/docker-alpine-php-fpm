@@ -9,7 +9,8 @@ RUN set -xe && \
       libxext \
       fontconfig \
       libpng \
-      libjpeg-turbo && \
+      libjpeg-turbo \
+      zip && \
     apk add --repository http://dl-3.alpinelinux.org/alpine/v3.8/main/ \
             --no-cache \
       libssl1.0 \
@@ -26,6 +27,7 @@ RUN set -xe && \
     docker-php-ext-configure intl && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                 --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install mbstring pdo_mysql intl gd && \
+    docker-php-ext-configure zip && \
+    docker-php-ext-install mbstring pdo_mysql intl gd zip && \
     apk del .php-deps .build-deps && \
     rm -rf /tmp/* /usr/local/lib/php/doc/* /var/cache/apk/*
