@@ -5,7 +5,7 @@ on:
     - master
     paths:
     - 'Dockerfile'
-    - '.github/workflows/build_and_push.yaml'
+    - '.github/workflows/build_and_push.yml'
 jobs:
   build_and_push:
     name: Build and Push Image
