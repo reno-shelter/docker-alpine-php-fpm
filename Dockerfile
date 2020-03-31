@@ -1,7 +1,7 @@
-FROM php:7.2-fpm-alpine
+FROM php:7.2-fpm-alpine3.11
 
 RUN set -xe && \
-    apk add --repository http://dl-3.alpinelinux.org/alpine/edge/main/ \
+    apk add --repository http://dl-3.alpinelinux.org/alpine/v3.11/main/ \
             --no-cache \
       icu \
       glib \
@@ -10,24 +10,18 @@ RUN set -xe && \
       fontconfig \
       libpng \
       libjpeg-turbo \
-      zip && \
-    apk add --repository http://dl-3.alpinelinux.org/alpine/v3.8/main/ \
-            --no-cache \
-      libssl1.0 \
-      libcrypto1.0 && \
-    apk add --no-cache --virtual .php-deps \
-      make && \
+      libzip-dev && \
     apk add --no-cache --virtual .build-deps \
       $PHPIZE_DEPS \
       zlib-dev \
       icu-dev \
       libpng-dev \
       libjpeg-turbo-dev \
-      g++ && \
+      oniguruma-dev && \
     docker-php-ext-configure intl && \
     docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                 --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-configure zip && \
-    docker-php-ext-install mbstring pdo_mysql intl gd zip && \
-    apk del .php-deps .build-deps && \
+    docker-php-ext-configure zip --with-libzip=/usr/include && \
+    docker-php-ext-install pdo_mysql intl gd zip opcache && \
+    apk del .build-deps && \
     rm -rf /tmp/* /usr/local/lib/php/doc/* /var/cache/apk/*
