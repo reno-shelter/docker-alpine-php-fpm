@@ -20,7 +20,7 @@ jobs:
       env:
         IMAGE_TAG: v0.1.0
       run: |-
-        CMD="docker run \
+        docker run \
           -v `pwd`:/workspace \
           -v ${DOCKER_CONFIG}/config.json:/kaniko/.docker/config.json:ro \
           gcr.io/kaniko-project/executor:latest \
@@ -29,5 +29,4 @@ jobs:
           --destination roxxinc/docker-alpine-php-fpm:latest \
           --destination roxxinc/docker-alpine-php-fpm:${IMAGE_TAG} \
           --cache=true \
-          --cache-repo roxxinc/docker-alpine-php-fpm-cache"
-
+          --cache-repo roxxinc/docker-alpine-php-fpm-cache
