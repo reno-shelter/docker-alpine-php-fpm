@@ -1,27 +1,17 @@
-FROM php:7.2-fpm-alpine3.11
+FROM php:7.4-fpm
 
-RUN set -xe && \
-    apk add --repository http://dl-3.alpinelinux.org/alpine/v3.11/main/ \
-            --no-cache \
-      icu \
-      glib \
-      libxrender \
-      libxext \
-      fontconfig \
-      libpng \
-      libjpeg-turbo \
-      libzip-dev && \
-    apk add --no-cache --virtual .build-deps \
-      $PHPIZE_DEPS \
-      zlib-dev \
-      icu-dev \
-      libpng-dev \
-      libjpeg-turbo-dev \
-      oniguruma-dev && \
-    docker-php-ext-configure intl && \
-    docker-php-ext-configure gd --with-png-dir=/usr/include/ \
-                                --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-configure zip --with-libzip=/usr/include && \
-    docker-php-ext-install pdo_mysql intl gd zip opcache && \
-    apk del .build-deps && \
-    rm -rf /tmp/* /usr/local/lib/php/doc/* /var/cache/apk/*
+RUN apt-get update && apt-get -y install libbz2-dev libzip-dev libpng-dev libgmp3-dev libicu-dev libjpeg62-turbo-dev libfreetype6-dev \
+    libxrender1 libfontconfig1 libxext6 fonts-ipafont git vim locales && \
+    docker-php-ext-install mysqli pdo_mysql bz2 gd zip gmp intl && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg  && \
+    docker-php-ext-install -j$(nproc) gd && \
+    pecl install pcov && docker-php-ext-enable pcov && \
+    apt-get clean
+
+RUN cd /opt && curl -LO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+    tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
+    cp wkhtmltox/bin/wk* /usr/local/bin/
+
+RUN set -x \
+  && docker-php-ext-install opcache \
+  && docker-php-ext-enable opcache

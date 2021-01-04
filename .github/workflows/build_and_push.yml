@@ -18,7 +18,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build and Push Image
       env:
-        IMAGE_TAG: v0.1.0
+        IMAGE_TAG: v0.2.0
       run: |-
         docker run \
           -v `pwd`:/workspace \
