@@ -6,13 +6,12 @@ RUN apt-get update && \
     docker-php-ext-install mysqli pdo_mysql bz2 gd zip gmp intl && \
     docker-php-ext-configure gd --with-freetype --with-jpeg  && \
     docker-php-ext-install -j$(nproc) gd && \
+    set -x && \
+    docker-php-ext-install opcache && \
+    docker-php-ext-enable opcache && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf /var/lib/apt/lists/*
 
 RUN cd /opt && curl -LO https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.3/wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
     tar vxf wkhtmltox-0.12.3_linux-generic-amd64.tar.xz && \
     cp wkhtmltox/bin/wk* /usr/local/bin/
-
-RUN set -x \
-  && docker-php-ext-install opcache \
-  && docker-php-ext-enable opcache
