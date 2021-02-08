@@ -2,7 +2,7 @@ FROM php:7.4-fpm
 
 RUN apt-get update && \
     apt-get -y install libbz2-dev libzip-dev libpng-dev libgmp3-dev libicu-dev libjpeg62-turbo-dev libfreetype6-dev sudo \
-    libxrender1 libfontconfig1 libxext6 fonts-ipafont git locales cron procps unzip wkhtmltopdf && \
+    libxrender1 libfontconfig1 libxext6 fonts-ipafont git locales cron procps unzip && \
     curl https://s3.ap-northeast-1.amazonaws.com/amazon-ssm-ap-northeast-1/latest/debian_amd64/amazon-ssm-agent.deb -o /tmp/amazon-ssm-agent.deb && \
     dpkg -i /tmp/amazon-ssm-agent.deb && \
     curl -L https://github.com/DataDog/dd-trace-php/releases/download/0.46.0/datadog-php-tracer_0.46.0_amd64.deb -o /tmp/datadog-php-tracer.deb && \
