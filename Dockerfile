@@ -14,6 +14,15 @@ RUN apt-get update && \
     docker-php-ext-install -j$(nproc) gd && \
     set -x && \
     docker-php-ext-install opcache && \
-    docker-php-ext-enable opcache && \
-    apt-get clean && \
+    docker-php-ext-enable opcache
+
+# wkhtmltopdf
+RUN apt-get -y install wget xfonts-75dpi xfonts-base gvfs colord glew-utils libvisual-0.4-plugins gstreamer1.0-tools \
+    opus-tools qt5-image-formats-plugins qtwayland5 qt5-qmltooling-plugins librsvg2-bin lm-sensors && \
+    wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb && \
+    cp /usr/local/bin/wkhtmlto* /usr/bin/ 
+
+
+RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* aws* /tmp/*.deb
